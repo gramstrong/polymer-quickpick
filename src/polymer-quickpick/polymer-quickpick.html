@@ -71,6 +71,9 @@ Rough polymer implementation of the QuickPick control
       onValueChange: function(newValue){
           this.buttonTitle = !!newValue ? newValue : SELECT;
           this.isOpen = false;
+          if(this.quickPickError){
+            this.validate();
+          }
       },
 
       validate: function(){
