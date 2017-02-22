@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!--
+`polymer-quickpick`
+Rough polymer implementation of the QuickPick control
+
+@demo demo/index.html
+-->
+
+<dom-module id="polymer-quickpick">
+  <link rel="import" href="../common-control/control-title.html">
+  <link rel="import" href="quick-pick-list.html">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]]></control-title>
+    <button on-click="openList">[[buttonTitle]]</button>
+    <quick-pick-list is-open="{{isOpen}}" ></quick-pick-list>
+  </template>
+
+  <script>
+
+    var POLYMER_QUICKPICK = 'polymer-quickpick';
+
+    Polymer({
+
+      is: POLYMER_QUICKPICK,
+
+      properties: {
+        name: {
+          type: String,
+          value: POLYMER_QUICKPICK,
+        },
+        quickPickTitle: {
+            type: String,
+            value: 'test'
+        },
+        quickPickItems: {
+            type: Array,
+            value: ""
+        },
+        quickPickError: {
+            type: Boolean,
+            value: false
+        },
+        buttonTitle: {
+            type: String,
+            value: 'Select'
+        },
+        isOpen: {
+            type: Boolean,
+            value: false
+        }
+      },
+      openList: function(){
+          this.isOpen = !this.isOpen;
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,33 @@
+<dom-module id="quick-pick-list">
+  <link rel="import" href="../common-control/drop-down.html">
+  <template>
+    <drop-down is-active="{{isOpen}}">
+      <template is="dom-repeat" items={{listItems}}>
+        <button>{{item}}</button>
+      </template>
+   </drop-down>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'quick-pick-list',
+      properties: {
+        listItems: {
+            type: Array,
+            value: []
+        },
+        isOpen: {
+            type: Boolean,
+            value: false
+        }
+      },
+      ready: function() {
+          this.listItems = [
+              "one",
+              "two",
+              "three"
+          ];
+      }
+    });
+  </script>
+</dom-module>

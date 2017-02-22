@@ -1,0 +1,7 @@
+{
+  "name": "polymer-quickpick-demo",
+  "short_name": "polymer-quickpick-demo",
+  "description": "A demo of a QuickPick made in Polymer",
+  "start_url": "/",
+  "display": "standalone"
+}

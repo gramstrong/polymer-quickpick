@@ -1,0 +1,22 @@
+<dom-module id="control-title">
+  <template>
+    <h4>[[controlTitle]]</h4>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'control-title',
+      properties: {
+        controlTitle: {
+            type: String,
+            value: ''
+        },
+        isError: {
+          type: Boolean,
+          value: false,
+        }
+      }
+    });
+  </script>
+</dom-module>
