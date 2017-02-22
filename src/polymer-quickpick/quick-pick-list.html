@@ -10,7 +10,7 @@
           <input class="quick-pick-search" value="{{searchString::input}}">
           <template is="dom-repeat" items="{{listItems}}"
               filter="{{computeFilter(searchString)}}">
-              <quick-pick-row on-click="valueChange" class="quick-pick-button">{{item}}</quick-pick-row>
+              <quick-pick-row quick-pick-value="{{quickPickValue}}" row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
           </template>
       </drop-down>
     </template>
@@ -48,10 +48,6 @@
                   return (lowerItem.indexOf(string) != -1);
               };
           }
-      },
-
-      valueChange: function(event){
-          this.quickPickValue = event.model.item;
       }
     });
   </script>

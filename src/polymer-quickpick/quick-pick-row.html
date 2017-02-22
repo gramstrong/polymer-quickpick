@@ -2,8 +2,10 @@
   <link rel="import" type="css" href="css/quick-pick-row.css">
 
   <template>
-    <button class$="{{setSelected(isSelected)}}">
-      <content></content>
+    <button
+      class$="{{setSelected(isSelected)}}"
+      on-click="toggleSelection">
+      <content><span>{{rowValue}}</span></content>
     </button>
   </template>
 
@@ -15,17 +17,28 @@
       properties: {
         rowValue: {
           type: String,
-          value: '',
-        },
+          value: ''
+       },
         isSelected: {
             type: Boolean,
-            value: false,
+            value: false
+       },
+        quickPickValue: {
+            type: String,
+            value: '',
             notify: true
         }
       },
+
       setSelected: function(newIsSelected){
         return newIsSelected ? 'quick-pick-row selected-row' : 'quick-pick-row';
+      },
+
+      toggleSelection: function(){
+        this.isSelected = !this.isSelected;
+        this.quickPickValue = this.isSelected ? this.rowValue : '';
       }
+
     });
   </script>
 </dom-module>

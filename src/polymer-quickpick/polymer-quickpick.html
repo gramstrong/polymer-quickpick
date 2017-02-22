@@ -67,6 +67,7 @@ Rough polymer implementation of the QuickPick control
       openList: function(){
           this.isOpen = !this.isOpen;
       },
+
       onValueChange: function(newValue){
           this.buttonTitle = !!newValue ? newValue : SELECT;
           this.isOpen = false;
