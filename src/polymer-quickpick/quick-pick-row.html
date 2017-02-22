@@ -1,6 +1,10 @@
 <dom-module id="quick-pick-row">
+  <link rel="import" type="css" href="css/quick-pick-row.css">
+
   <template>
-    <button class$="{{setSelected(isSelected)}}">{{rowValue}}</button>
+    <button class$="{{setSelected(isSelected)}}">
+      <content></content>
+    </button>
   </template>
 
   <script>

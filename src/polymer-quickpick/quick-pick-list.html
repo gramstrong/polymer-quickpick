@@ -1,17 +1,19 @@
-<link rel="import" href="../common-control/drop-down.html">
-<link rel="import" href="quick-pick-row.html.html">
+
 
 <dom-module id="quick-pick-list">
+    <link rel="import" href="../common-control/drop-down.html">
+    <link rel="import" href="quick-pick-row.html">
     <link rel="import" type="css" href="css/quick-pick.css">
+
     <template>
       <drop-down is-active="{{isOpen}}">
           <input class="quick-pick-search" value="{{searchString::input}}">
           <template is="dom-repeat" items="{{listItems}}"
               filter="{{computeFilter(searchString)}}">
-              <button on-click="valueChange" class="quick-pick-button">{{item}}</button>
+              <quick-pick-row on-click="valueChange" class="quick-pick-button">{{item}}</quick-pick-row>
           </template>
       </drop-down>
-  </template>
+    </template>
 
   <script>
     Polymer({
