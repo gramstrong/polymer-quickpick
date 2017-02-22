@@ -1,10 +1,11 @@
 <dom-module id="drop-down">
   <link rel="import" type="css" href="css/drop-down.css">
   <template>
-    <div class$="{{dropDownClasses(isActive)}}"><div>
-      <div class="dropdown-content">
+    <template is="dom-if" if="{{isActive}}" restamp="true">
+      <div class$="{{dropDownClasses(isActive)}}">
+        <content class="dropdown-content"></content>
       </div>
-    </div>
+    </template>
   </template>
 
   <script>
@@ -17,6 +18,7 @@
             value: false
         }
       },
+
       dropDownClasses: function(isActive) {
         return isActive ? 'active' : '';
       }

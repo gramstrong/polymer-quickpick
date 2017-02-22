@@ -1,6 +1,7 @@
 <dom-module id="control-title">
+  <link rel="import" type="css" href="css/control-title.css">
   <template>
-    <h4>[[controlTitle]]</h4>
+    <span class$="title {{setErrorTitle(isError, isRequired)}}">[[controlTitle]]</span>
   </template>
 
   <script>
@@ -15,7 +16,23 @@
         isError: {
           type: Boolean,
           value: false,
+          observer: 'setIsError'
+        },
+        isRequired: {
+          type: Boolean,
+          value: false
         }
+      },
+
+      setErrorTitle: function(newIsError, newIsRequired){
+        var errorClass = newIsError ? 'error-title' : '';
+        var requiredClass = newIsRequired ? 'required-title' : '';
+
+        return [errorClass, requiredClass].join(' ');
+      },
+
+      setIsError: function(newIsError){
+        this.isError = this.isRequired ? newIsError : false;
       }
     });
   </script>

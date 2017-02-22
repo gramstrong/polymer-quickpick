@@ -13,10 +13,26 @@
     <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="/src/polymer-quickpick/polymer-quickpick.html">
   </head>
+
   <body>
-      <polymer-quickpick quick-pick-title="Statistical Cause" quick-pick-items='["one", "two", "three"]'></polymer-quickpick>
+
+      <polymer-quickpick
+            id="quickPickDemo"
+            quick-pick-title="Ownership"
+            quick-pick-items='["Federal", "State", "County", "City/Municipality", "Private", "Other", "Industrial"]'
+            is-required="true"
+      ></polymer-quickpick>
+
       <br />
       <br />
-      <button>Submit</button>
+
+      <script>
+          function submitQuickPick(){
+              var quickPick = document.querySelector('polymer-quickpick');
+              quickPick.validate();
+          }
+      </script>
+
+      <button onclick="submitQuickPick()">Submit</button>
   </body>
 </html>

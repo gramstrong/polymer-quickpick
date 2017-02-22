@@ -1,0 +1,15 @@
+.title{
+    display: block;
+    padding-bottom: 10px;
+}
+
+.title.required-title:before{
+    content: "*";
+    font-weight: 600;
+    color: #D60404;
+}
+
+.title.error-title{
+    font-weight: 600;
+    color: #D60404;
+}

@@ -1,51 +1,27 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-
-<!--
-`polymer-quickpick`
-Rough polymer implementation of the QuickPick control
-
-@demo demo/index.html
--->
-
-<dom-module id="polymer-quickpick">
-  <link rel="import" href="../common-control/control-title.html">
+<dom-module id="quick-pick-row">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]]></control-title>
-    <button>[[buttonTitle]]</button>
+    <button class$="{{setSelected(isSelected)}}">{{rowValue}}</button>
   </template>
 
   <script>
 
-    var POLYMER_QUICKPICK = 'polymer-quickpick';
-
     Polymer({
-
-      is: POLYMER_QUICKPICK,
+      is: 'quick-pick-row',
 
       properties: {
-        name: {
+        rowValue: {
           type: String,
-          value: POLYMER_QUICKPICK,
+          value: '',
         },
-        quickPickTitle: {
-            type: String,
-            value: 'test'
-        },
-        quickPickError: {
+        isSelected: {
             type: Boolean,
-            value: false
-        },
-        buttonTitle: {
-            type: String,
-            value: 'Select'
+            value: false,
+            notify: true
         }
       },
-
+      setSelected: function(newIsSelected){
+        return newIsSelected ? 'quick-pick-row selected-row' : 'quick-pick-row';
+      }
     });
   </script>
 </dom-module>

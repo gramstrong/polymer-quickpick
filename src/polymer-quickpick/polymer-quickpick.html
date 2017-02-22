@@ -11,19 +11,16 @@ Rough polymer implementation of the QuickPick control
   <link rel="import" href="../common-control/control-title.html">
   <link rel="import" href="quick-pick-list.html">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]]></control-title>
+    <control-title control-title="{{quickPickTitle}}" is-error={{quickPickError}} is-required="{{isRequired}}"></control-title>
     <button on-click="openList">[[buttonTitle]]</button>
-    <quick-pick-list is-open="{{isOpen}}" ></quick-pick-list>
+    <quick-pick-list is-open="{{isOpen}}" list-items="{{quickPickItems}}" quick-pick-value="{{quickPickValue}}"></quick-pick-list>
   </template>
 
   <script>
 
     var POLYMER_QUICKPICK = 'polymer-quickpick';
+
+    var SELECT = 'Select';
 
     Polymer({
 
@@ -44,7 +41,19 @@ Rough polymer implementation of the QuickPick control
         },
         quickPickError: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
+        },
+        isRequired: {
+          type: Boolean,
+          value: false,
+          notifiy: true
+        },
+        quickPickValue:{
+            type: String,
+            value: '',
+            notify: true,
+            observer: 'onValueChange'
         },
         buttonTitle: {
             type: String,
@@ -57,7 +66,16 @@ Rough polymer implementation of the QuickPick control
       },
       openList: function(){
           this.isOpen = !this.isOpen;
+      },
+      onValueChange: function(newValue){
+          this.buttonTitle = !!newValue ? newValue : SELECT;
+          this.isOpen = false;
+      },
+
+      validate: function(){
+        this.quickPickError = !this.quickPickValue;
       }
+
     });
   </script>
 </dom-module>

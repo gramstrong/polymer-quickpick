@@ -1,11 +1,16 @@
+<link rel="import" href="../common-control/drop-down.html">
+<link rel="import" href="quick-pick-row.html.html">
+
 <dom-module id="quick-pick-list">
-  <link rel="import" href="../common-control/drop-down.html">
-  <template>
-    <drop-down is-active="{{isOpen}}">
-      <template is="dom-repeat" items={{listItems}}>
-        <button>{{item}}</button>
-      </template>
-   </drop-down>
+    <link rel="import" type="css" href="css/quick-pick.css">
+    <template>
+      <drop-down is-active="{{isOpen}}">
+          <input class="quick-pick-search" value="{{searchString::input}}">
+          <template is="dom-repeat" items="{{listItems}}"
+              filter="{{computeFilter(searchString)}}">
+              <button on-click="valueChange" class="quick-pick-button">{{item}}</button>
+          </template>
+      </drop-down>
   </template>
 
   <script>
@@ -19,14 +24,32 @@
         isOpen: {
             type: Boolean,
             value: false
+        },
+        filterString:{
+            type: String,
+            value: ''
+        },
+        quickPickValue: {
+            type: String,
+            value: '',
+            notify: true
         }
       },
-      ready: function() {
-          this.listItems = [
-              "one",
-              "two",
-              "three"
-          ];
+
+      computeFilter: function(string) {
+          if (!string) {
+              return null;
+          } else {
+              string = string.toLowerCase();
+              return function(item) {
+                  var lowerItem = item.toLowerCase();
+                  return (lowerItem.indexOf(string) != -1);
+              };
+          }
+      },
+
+      valueChange: function(event){
+          this.quickPickValue = event.model.item;
       }
     });
   </script>
