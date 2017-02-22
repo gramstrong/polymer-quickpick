@@ -9,10 +9,11 @@ Rough polymer implementation of the QuickPick control
 
 <dom-module id="polymer-quickpick">
   <link rel="import" href="../common-control/control-title.html">
+  <link rel="import" href="quick-pick-button.html">
   <link rel="import" href="quick-pick-list.html">
   <template>
     <control-title control-title="{{quickPickTitle}}" is-error={{quickPickError}} is-required="{{isRequired}}"></control-title>
-    <button on-click="openList">[[buttonTitle]]</button>
+    <quick-pick-button on-click="openList" quick-pick-value="{{quickPickValue}}">[[buttonTitle]]</quick-pick-button>
     <quick-pick-list is-open="{{isOpen}}" list-items="{{quickPickItems}}" quick-pick-value="{{quickPickValue}}"></quick-pick-list>
   </template>
 
@@ -55,10 +56,6 @@ Rough polymer implementation of the QuickPick control
             notify: true,
             observer: 'onValueChange'
         },
-        buttonTitle: {
-            type: String,
-            value: 'Select'
-        },
         isOpen: {
             type: Boolean,
             value: false
@@ -69,7 +66,6 @@ Rough polymer implementation of the QuickPick control
       },
 
       onValueChange: function(newValue){
-          this.buttonTitle = !!newValue ? newValue : SELECT;
           this.isOpen = false;
           if(this.quickPickError){
             this.validate();
