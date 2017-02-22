@@ -2,8 +2,9 @@
     position: relative;
     display: none;
     position: absolute;
-    max-width: 200px;
+    width: 150px;
     z-index: 0;
+    border: 1px solid #000000;
 }
 
 .drop-down-content {
