@@ -1,44 +1,43 @@
 <dom-module id="quick-pick-row">
-  <link rel="import" type="css" href="css/quick-pick-row.css">
+    <link rel="import" type="css" href="css/quick-pick-row.css">
 
-  <template>
-    <button
-      class$="{{setSelected(isSelected)}}"
-      on-click="toggleSelection">
-      <content><span>{{rowValue}}</span></content>
-    </button>
-  </template>
+    <template>
+        <button
+        class$="{{setSelected(isSelected)}}"
+        on-click="toggleSelection">
+            <content><span>{{rowValue}}</span></content>
+        </button>
+    </template>
 
-  <script>
-
+    <script>
     Polymer({
-      is: 'quick-pick-row',
+          is: 'quick-pick-row',
 
-      properties: {
-        rowValue: {
-          type: String,
-          value: ''
-       },
-        isSelected: {
-            type: Boolean,
-            value: false
-       },
-        quickPickValue: {
-            type: String,
-            value: '',
-            notify: true
-        }
-      },
+          properties: {
+              rowValue: {
+                  type: String,
+                  value: ''
+              },
+              isSelected: {
+                  type: Boolean,
+                  value: false
+              },
+              quickPickValue: {
+                  type: String,
+                  value: '',
+                  notify: true
+              }
+          },
 
-      setSelected: function(newIsSelected){
-        return newIsSelected ? 'quick-pick-row selected-row' : 'quick-pick-row';
-      },
+          setSelected: function(newIsSelected){
+              return newIsSelected ? 'quick-pick-row selected-row' : 'quick-pick-row';
+          },
 
-      toggleSelection: function(){
-        this.isSelected = !this.isSelected;
-        this.quickPickValue = this.isSelected ? this.rowValue : '';
-      }
+          toggleSelection: function(){
+              this.isSelected = !this.isSelected;
+              this.quickPickValue = this.isSelected ? this.rowValue : '';
+          }
 
     });
-  </script>
+    </script>
 </dom-module>

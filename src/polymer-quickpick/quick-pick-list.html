@@ -1,54 +1,52 @@
-
-
 <dom-module id="quick-pick-list">
     <link rel="import" href="../common-control/drop-down.html">
     <link rel="import" href="quick-pick-row.html">
     <link rel="import" type="css" href="css/quick-pick.css">
 
     <template>
-      <drop-down is-active="{{isOpen}}">
-          <input class="quick-pick-search" value="{{searchString::input}}">
-          <template is="dom-repeat" items="{{listItems}}"
-              filter="{{computeFilter(searchString)}}">
-              <quick-pick-row quick-pick-value="{{quickPickValue}}" row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
-          </template>
-      </drop-down>
+        <drop-down is-active="{{isOpen}}">
+            <input class="quick-pick-search" value="{{searchString::input}}">
+            <template is="dom-repeat" items="{{listItems}}"
+                filter="{{computeFilter(searchString)}}">
+                <quick-pick-row quick-pick-value="{{quickPickValue}}" row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
+            </template>
+        </drop-down>
     </template>
 
-  <script>
-    Polymer({
-      is: 'quick-pick-list',
-      properties: {
-        listItems: {
-            type: Array,
-            value: []
+    <script>
+        Polymer({
+            is: 'quick-pick-list',
+            properties: {
+            listItems: {
+                type: Array,
+                value: []
+            },
+            isOpen: {
+                type: Boolean,
+                value: false
+            },
+            filterString:{
+                type: String,
+                value: ''
+            },
+            quickPickValue: {
+                type: String,
+                value: '',
+                notify: true
+            }
         },
-        isOpen: {
-            type: Boolean,
-            value: false
-        },
-        filterString:{
-            type: String,
-            value: ''
-        },
-        quickPickValue: {
-            type: String,
-            value: '',
-            notify: true
-        }
-      },
 
-      computeFilter: function(string) {
-          if (!string) {
-              return null;
-          } else {
-              string = string.toLowerCase();
-              return function(item) {
-                  var lowerItem = item.toLowerCase();
-                  return (lowerItem.indexOf(string) != -1);
-              };
+          computeFilter: function(string) {
+              if (!string) {
+                  return null;
+              } else {
+                  string = string.toLowerCase();
+                  return function(item) {
+                      var lowerItem = item.toLowerCase();
+                      return (lowerItem.indexOf(string) != -1);
+                  };
+              }
           }
-      }
-    });
-  </script>
+        });
+    </script>
 </dom-module>

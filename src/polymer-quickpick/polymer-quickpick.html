@@ -8,74 +8,71 @@ Rough polymer implementation of the QuickPick control
 -->
 
 <dom-module id="polymer-quickpick">
-  <link rel="import" href="../common-control/control-title.html">
-  <link rel="import" href="quick-pick-button.html">
-  <link rel="import" href="quick-pick-list.html">
-  <template>
-    <control-title control-title="{{quickPickTitle}}" is-error={{quickPickError}} is-required="{{isRequired}}"></control-title>
-    <quick-pick-button on-click="openList" quick-pick-value="{{quickPickValue}}">[[buttonTitle]]</quick-pick-button>
-    <quick-pick-list is-open="{{isOpen}}" list-items="{{quickPickItems}}" quick-pick-value="{{quickPickValue}}"></quick-pick-list>
-  </template>
+    <link rel="import" href="../common-control/control-title.html">
+    <link rel="import" href="quick-pick-button.html">
+    <link rel="import" href="quick-pick-list.html">
+    <template>
+        <control-title control-title="{{quickPickTitle}}" is-error={{quickPickError}} is-required="{{isRequired}}"></control-title>
+        <quick-pick-button on-click="openList" quick-pick-value="{{quickPickValue}}">[[buttonTitle]]</quick-pick-button>
+        <quick-pick-list is-open="{{isOpen}}" list-items="{{quickPickItems}}" quick-pick-value="{{quickPickValue}}"></quick-pick-list>
+    </template>
 
-  <script>
+    <script>
 
-    var POLYMER_QUICKPICK = 'polymer-quickpick';
+        var POLYMER_QUICKPICK = 'polymer-quickpick';
 
-    var SELECT = 'Select';
+        Polymer({
 
-    Polymer({
+            is: POLYMER_QUICKPICK,
 
-      is: POLYMER_QUICKPICK,
+            properties: {
+                name: {
+                  type: String,
+                  value: POLYMER_QUICKPICK,
+                },
+                quickPickTitle: {
+                    type: String,
+                    value: 'test'
+                },
+                quickPickItems: {
+                    type: Array,
+                    value: ""
+                },
+                quickPickError: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                isRequired: {
+                  type: Boolean,
+                  value: false
+                },
+                quickPickValue:{
+                    type: String,
+                    value: '',
+                    notify: true,
+                    observer: 'onValueChange'
+                },
+                isOpen: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+            openList: function(){
+                this.isOpen = !this.isOpen;
+            },
 
-      properties: {
-        name: {
-          type: String,
-          value: POLYMER_QUICKPICK,
-        },
-        quickPickTitle: {
-            type: String,
-            value: 'test'
-        },
-        quickPickItems: {
-            type: Array,
-            value: ""
-        },
-        quickPickError: {
-            type: Boolean,
-            value: false,
-            notify: true
-        },
-        isRequired: {
-          type: Boolean,
-          value: false,
-          notifiy: true
-        },
-        quickPickValue:{
-            type: String,
-            value: '',
-            notify: true,
-            observer: 'onValueChange'
-        },
-        isOpen: {
-            type: Boolean,
-            value: false
-        }
-      },
-      openList: function(){
-          this.isOpen = !this.isOpen;
-      },
+            onValueChange: function(newValue){
+                this.isOpen = false;
+                if(this.quickPickError){
+                  this.validate();
+                }
+            },
 
-      onValueChange: function(newValue){
-          this.isOpen = false;
-          if(this.quickPickError){
-            this.validate();
-          }
-      },
+            validate: function(){
+                this.quickPickError = !this.quickPickValue;
+            }
 
-      validate: function(){
-        this.quickPickError = !this.quickPickValue;
-      }
-
-    });
-  </script>
+        });
+    </script>
 </dom-module>
