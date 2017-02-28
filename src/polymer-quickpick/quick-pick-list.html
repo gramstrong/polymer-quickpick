@@ -1,29 +1,29 @@
 <dom-module id="quick-pick-list">
     <link rel="import" href="../common-control/drop-down.html">
-    <link rel="import" href="quick-pick-row.html">
+    <link rel="import" href="../common-control/selectable-button.html">
     <link rel="import" type="css" href="css/quick-pick.css">
 
     <template>
-        <drop-down is-active="{{isOpen}}">
+        <drop-down is-active="[[isOpen]]">
             <input class="quick-pick-search" value="{{searchString::input}}">
-            <template is="dom-repeat" items="{{listItems}}"
-                filter="{{computeFilter(searchString)}}">
-                <quick-pick-row row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
+            <template is="dom-repeat" items="[[listItems]]"
+                filter="[[computeFilter(searchString)]]">
+                <selectable-button button-value="[[item]]"></selectable-button>
             </template>
         </drop-down>
     </template>
 
     <script>
-        Polymer({
-            is: 'quick-pick-list',
-            properties: {
+    Polymer({
+        is: 'quick-pick-list',
+        properties: {
             listItems: {
                 type: Array,
                 value: []
             },
             isOpen: {
                 type: Boolean,
-                value: false
+                value: false,
             },
             filterString:{
                 type: String,
@@ -32,11 +32,11 @@
         },
 
         listeners: {
-            'quick-pick-select': 'closeList'
+            'button-select': 'closeList',
+            'button-deselect': 'closeList'
         },
 
         closeList: function(event){
-            this.isOpen = false;
             this.fire('quick-pick-close', event.detail);
         },
 
@@ -46,8 +46,8 @@
             } else {
                 string = string.toLowerCase();
                 return function(item) {
-                    var lowerItem = item.toLowerCase();
-                    return (lowerItem.indexOf(string) != -1);
+                    var title = item.title.toLowerCase();
+                    return (title.indexOf(string) != -1);
                 };
             }
         }

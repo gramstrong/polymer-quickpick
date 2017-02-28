@@ -1,0 +1,45 @@
+<dom-module id="selectable-button">
+    <link rel="import" type="css" href="css/selectable-button.css">
+
+    <template>
+        <button class$="{{setSelected(isSelected)}}" on-tap='selectRow'>
+            <content><span>{{buttonValue.title}}</span></content>
+        </button>
+    </template>
+
+    <script>
+    Polymer({
+        is: 'selectable-button',
+
+        properties: {
+            buttonValue: {
+                type: Object,
+                value: {
+                    title: '',
+                    value: {}
+                }
+            },
+            isSelected: {
+                type: Boolean,
+                value: false
+            }
+        },
+
+        setSelected: function(newIsSelected){
+            return newIsSelected ? 'selectable-button selected-button' : 'selectable-button';
+        },
+
+        selectRow: function() {
+            this.isSelected = !this.isSelected;            
+            
+            if(this.isSelected){
+                this.fire('button-select', {value: this.buttonValue});
+            }
+            else{
+                this.fire('button-deselect', {value: null});
+            }
+        }
+
+    });
+    </script>
+</dom-module>
