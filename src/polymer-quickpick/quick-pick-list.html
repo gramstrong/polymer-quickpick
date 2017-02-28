@@ -8,7 +8,7 @@
             <input class="quick-pick-search" value="{{searchString::input}}">
             <template is="dom-repeat" items="{{listItems}}"
                 filter="{{computeFilter(searchString)}}">
-                <quick-pick-row quick-pick-value="{{quickPickValue}}" row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
+                <quick-pick-row row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
             </template>
         </drop-down>
     </template>
@@ -28,25 +28,29 @@
             filterString:{
                 type: String,
                 value: ''
-            },
-            quickPickValue: {
-                type: String,
-                value: '',
-                notify: true
             }
         },
 
-          computeFilter: function(string) {
-              if (!string) {
-                  return null;
-              } else {
-                  string = string.toLowerCase();
-                  return function(item) {
-                      var lowerItem = item.toLowerCase();
-                      return (lowerItem.indexOf(string) != -1);
-                  };
-              }
-          }
-        });
+        listeners: {
+            'quick-pick-select': 'closeList'
+        },
+
+        closeList: function(event){
+            this.isOpen = false;
+            this.fire('quick-pick-close', event.detail);
+        },
+
+        computeFilter: function(string) {
+            if (!string) {
+                return null;
+            } else {
+                string = string.toLowerCase();
+                return function(item) {
+                    var lowerItem = item.toLowerCase();
+                    return (lowerItem.indexOf(string) != -1);
+                };
+            }
+        }
+    });
     </script>
 </dom-module>

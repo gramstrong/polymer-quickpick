@@ -31,12 +31,10 @@ Rough polymer implementation of the QuickPick control
                   value: POLYMER_QUICKPICK,
                 },
                 quickPickTitle: {
-                    type: String,
-                    value: 'test'
+                    type: String
                 },
                 quickPickItems: {
-                    type: Array,
-                    value: ""
+                    type: Array
                 },
                 quickPickError: {
                     type: Boolean,
@@ -49,24 +47,27 @@ Rough polymer implementation of the QuickPick control
                 },
                 quickPickValue:{
                     type: String,
-                    value: '',
-                    notify: true,
-                    observer: 'onValueChange'
+                    value: ''
                 },
                 isOpen: {
                     type: Boolean,
                     value: false
                 }
             },
-            openList: function(){
-                this.isOpen = !this.isOpen;
+
+            listeners: {
+                'quick-pick-close': 'setValue'
             },
 
-            onValueChange: function(newValue){
-                this.isOpen = false;
-                if(this.quickPickError){
-                  this.validate();
+            setValue: function(event){
+                this.quickPickValue = event.detail.value;
+                if(!!this.quickPickValue){
+                    this.validate();
                 }
+            },
+
+            openList: function(){
+                this.isOpen = !this.isOpen;
             },
 
             validate: function(){
