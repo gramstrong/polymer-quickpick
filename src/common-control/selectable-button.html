@@ -2,7 +2,7 @@
     <link rel="import" type="css" href="css/selectable-button.css">
 
     <template>
-        <button class$="{{setSelected(isSelected)}}" on-tap='selectRow'>
+        <button class$="{{setSelected(isSelected)}}">
             <content><span>{{buttonValue.title}}</span></content>
         </button>
     </template>
@@ -29,15 +29,17 @@
             return newIsSelected ? 'selectable-button selected-button' : 'selectable-button';
         },
 
-        selectRow: function() {
-            this.isSelected = !this.isSelected;            
-            
-            if(this.isSelected){
+        selectRow: function(e, o) {
+            if(!this.isSelected){
                 this.fire('button-select', {value: this.buttonValue});
             }
             else{
                 this.fire('button-deselect', {value: null});
             }
+        },
+
+        listeners: {
+            'tap': 'selectRow'
         }
 
     });

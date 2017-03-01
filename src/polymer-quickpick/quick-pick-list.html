@@ -6,10 +6,14 @@
     <template>
         <drop-down is-active="[[isOpen]]">
             <input class="quick-pick-search" value="{{searchString::input}}">
-            <template is="dom-repeat" items="[[listItems]]"
+            <template is="dom-repeat" 
+                id = "quickPickList"
+                items="[[listItems]]"
                 filter="[[computeFilter(searchString)]]">
-                <selectable-button button-value="[[item]]"></selectable-button>
+                <selectable-button is-selected = "[[item.isSelected]]" button-value="[[item]]"></selectable-button>
             </template>
+
+            <array-selector id="selector" items="[[listItems]]" selected="{{selected}}" multi toggle></array-selector>
         </drop-down>
     </template>
 
@@ -32,11 +36,21 @@
         },
 
         listeners: {
-            'button-select': 'closeList',
-            'button-deselect': 'closeList'
+            'button-select': 'addButton',
+            'button-deselect': 'removeButton'
         },
 
-        closeList: function(event){
+        addButton: function(event, c){
+            var listItem = this.$.quickPickList.itemForElement(event.target);
+            this.$.selector.select(listItem);
+            
+            this.fire('quick-pick-close', event.detail);          
+        },
+
+        removeButton: function(event){
+            var listItem = this.$.quickPickList.itemForElement(event.target);
+            listItem.selected = false;            
+            this.$.selector.select(listItem);
             this.fire('quick-pick-close', event.detail);
         },
 
