@@ -12,21 +12,14 @@ Rough polymer implementation of the QuickPick control
     <link rel="import" href="quick-pick-list.html">
     <template>
         <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]] is-required="[[isRequired]]"></control-title>
-        <selectable-button on-click="openList" button-value="[[quickPickValue]]"></selectable-button>
+        <selectable-button on-click="openList" button-value="[[quickPickValue]]" is-selected="[[quickPickValue.value]]"></selectable-button>
         <quick-pick-list multi="[[multi]]" is-open="[[isOpen]]" list-items="[[quickPickItems]]"></quick-pick-list>
     </template>
 
     <script>
 
-    var DEFAULT_QUICKPICK_VALUE = {
-        title: 'Select',
-        value: false
-    };
-
-    var MULTI_QUICKPICK_VALUE = {
-        title: 'Select',
-        value: {}
-    };
+    var DEFAULT_QUICKPICK_VALUE = 'Select';
+    var MULTI_QUICKPICK_VALUE = 'Mutliple';
 
     Polymer({
 
@@ -45,8 +38,11 @@ Rough polymer implementation of the QuickPick control
                 notify: true
             },
             quickPickValue:{
-                type: String,
-                value: DEFAULT_QUICKPICK_VALUE
+                type: Object,
+                value: {
+                    title: DEFAULT_QUICKPICK_VALUE,
+                    value: false
+                }
             },
             isRequired: {
                 type: Boolean,
@@ -67,22 +63,33 @@ Rough polymer implementation of the QuickPick control
         },
 
         setValue: function(event){
-            var value;
             var selected = event.detail;
+            var title = this.getValueTitle(selected);
 
-            if(selected.constructor === Array){
-                value = MULTI_QUICKPICK_VALUE;
-                value.value = selected;
-            }
-            else{
-                this.quickPickValue = selected.value ? selected : DEFAULT_QUICKPICK_VALUE;
-            }
+            this.set('quickPickValue.title', title);
+            this.set('quickPickValue.value', selected.value);
 
             this.isOpen = false;
 
             if(!this.quickPickValue.value === false){
                 this.validate();
             }
+        },
+
+        getValueTitle: function(selected){
+            var title;
+
+            if(this.multi && selected.length){
+                title = selected.length > 1 ? MULTI_QUICKPICK_VALUE : selected[0].title;
+            }
+            else if(selected.value){
+                title = selected.title
+            }
+            else{
+                title = DEFAULT_QUICKPICK_VALUE
+            }
+
+            return title;
         },
 
         openList: function(){
