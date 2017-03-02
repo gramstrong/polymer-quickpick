@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../common-control/control-title.html">
+<link rel="import" href="quick-pick-list.html">
 
 <!--
 `polymer-quickpick`
@@ -8,8 +10,6 @@ Rough polymer implementation of the QuickPick control
 -->
 
 <dom-module id="polymer-quickpick">
-    <link rel="import" href="../common-control/control-title.html">
-    <link rel="import" href="quick-pick-list.html">
     <template>
         <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]] is-required="[[isRequired]]"></control-title>
         <selectable-button on-click="openList" button-value="[[quickPickValue]]" is-selected="[[quickPickValue.value]]"></selectable-button>

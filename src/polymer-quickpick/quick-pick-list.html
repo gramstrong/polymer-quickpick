@@ -1,9 +1,13 @@
-<dom-module id="quick-pick-list">
-    <link rel="import" href="../common-control/drop-down.html">
-    <link rel="import" href="../common-control/selectable-button.html">
-    <link rel="import" type="css" href="css/quick-pick.css">
+<link rel="import" href="../common-control/drop-down.html">
+<link rel="import" href="../common-control/selectable-button.html">
 
+<dom-module id="quick-pick-list">
     <template>
+        <style>
+        .quick-pick-search{
+            width: 146px;
+        }
+        </style>
         <drop-down is-active="[[isOpen]]">
             <input class="quick-pick-search" value="{{searchString::input}}">
             <template is="dom-repeat" 
