@@ -12,7 +12,7 @@ Rough polymer implementation of the QuickPick control
     <link rel="import" href="quick-pick-list.html">
     <template>
         <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]] is-required="[[isRequired]]"></control-title>
-        <selectable-button on-click="openList" button-value="[[quickPickValue]]" is-selected="[[quickPickValue.value]]"></selectable-button>
+        <selectable-button on-click="openList" button-value="[[quickPickValue]]" is-selected="[[hasSelection(quickPickValue.value)]]"></selectable-button>
         <quick-pick-list multi="[[multi]]" is-open="[[isOpen]]" list-items="[[quickPickItems]]"></quick-pick-list>
     </template>
 
@@ -65,13 +65,14 @@ Rough polymer implementation of the QuickPick control
         setValue: function(event){
             var selected = event.detail;
             var title = this.getValueTitle(selected);
+            var value = selected.length === 0 ? false : selected;
 
             this.set('quickPickValue.title', title);
-            this.set('quickPickValue.value', selected.value);
+            this.set('quickPickValue.value', value);
 
             this.isOpen = false;
 
-            if(!this.quickPickValue.value === false){
+            if(this.quickPickError){
                 this.validate();
             }
         },
@@ -92,12 +93,16 @@ Rough polymer implementation of the QuickPick control
             return title;
         },
 
+        hasSelection: function(quickPickValue){
+            return (quickPickValue || (this.multi && quickPickValue.length));
+        },
+
         openList: function(){
             this.isOpen = !this.isOpen;
         },
 
         validate: function(){
-            this.quickPickError = (this.quickPickValue.value === false);
+            this.quickPickError = !this.hasSelection(this.quickPickValue.value);
         }
 
     });
