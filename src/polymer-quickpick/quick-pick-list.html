@@ -63,10 +63,17 @@
             var self = this;
 
             this.listItems.forEach(function(item, index){
-                self.listItems[index].isSelected = false;
+                var value = item.value;
+                var title = item.title;
+
+                self.set(['listItems', index], {
+                    title: title, 
+                    isSelected:false, 
+                    value: value
+                });
             });
 
-            // selector.clearSelection();            
+            selector.clearSelection();            
         },
 
         selectItem: function(event){
