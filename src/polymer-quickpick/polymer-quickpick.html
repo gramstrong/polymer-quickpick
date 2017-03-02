@@ -13,7 +13,7 @@ Rough polymer implementation of the QuickPick control
     <template>
         <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]] is-required="[[isRequired]]"></control-title>
         <selectable-button on-click="openList" button-value="[[quickPickValue]]"></selectable-button>
-        <quick-pick-list is-open="[[isOpen]]" list-items="[[quickPickItems]]"></quick-pick-list>
+        <quick-pick-list multi="[[multi]]" is-open="[[isOpen]]" list-items="[[quickPickItems]]"></quick-pick-list>
     </template>
 
     <script>
@@ -21,6 +21,11 @@ Rough polymer implementation of the QuickPick control
     var DEFAULT_QUICKPICK_VALUE = {
         title: 'Select',
         value: false
+    };
+
+    var MULTI_QUICKPICK_VALUE = {
+        title: 'Select',
+        value: {}
     };
 
     Polymer({
@@ -39,26 +44,40 @@ Rough polymer implementation of the QuickPick control
                 value: false,
                 notify: true
             },
-            isRequired: {
-                type: Boolean,
-                value: false
-            },
             quickPickValue:{
                 type: String,
                 value: DEFAULT_QUICKPICK_VALUE
             },
+            isRequired: {
+                type: Boolean,
+                value: false
+            },
             isOpen: {
+                type: Boolean,
+                value: false
+            },
+            multi: {
                 type: Boolean,
                 value: false
             }
         },
 
         listeners: {
-            'quick-pick-close': 'setValue'
+            'selection-made': 'setValue'
         },
 
         setValue: function(event){
-            this.quickPickValue = event.detail.value || DEFAULT_QUICKPICK_VALUE;
+            var value;
+            var selected = event.detail;
+
+            if(selected.constructor === Array){
+                value = MULTI_QUICKPICK_VALUE;
+                value.value = selected;
+            }
+            else{
+                this.quickPickValue = selected.value ? selected : DEFAULT_QUICKPICK_VALUE;
+            }
+
             this.isOpen = false;
 
             if(!this.quickPickValue.value === false){

@@ -10,10 +10,10 @@
                 id = "quickPickList"
                 items="[[listItems]]"
                 filter="[[computeFilter(searchString)]]">
-                <selectable-button is-selected = "[[item.isSelected]]" button-value="[[item]]"></selectable-button>
+                <selectable-button is-selected=[[item.isSelected]] button-value="[[item]]"></selectable-button>
             </template>
 
-            <array-selector id="selector" items="[[listItems]]" selected="{{selected}}" multi toggle></array-selector>
+            <array-selector id="selector" items="[[listItems]]" selected="{{selected}}" multi=[[multi]] toggle></array-selector>
         </drop-down>
     </template>
 
@@ -32,26 +32,53 @@
             filterString:{
                 type: String,
                 value: ''
+            },
+            multi: {
+                type: Boolean,
+                value: false
             }
         },
 
+        ready: function(){
+            this.clearSelection();
+        },
+
         listeners: {
-            'button-select': 'addButton',
-            'button-deselect': 'removeButton'
+            'button-select': 'selectItem',
+            'button-deselect': 'selectItem'
         },
 
-        addButton: function(event, c){
+        observers: [
+            'editItem(listItems.splices)'
+        ],
+
+        editItem: function(changeRecord){
+            if(changeRecord){
+                console.log(changeRecord);
+            }
+        },
+
+        clearSelection: function(){
+            var selector = this.$.selector;
+            var self = this;
+
+            this.listItems.forEach(function(item, index){
+                self.listItems[index].isSelected = false;
+            });
+
+            // selector.clearSelection();            
+        },
+
+        selectItem: function(event){
+            var listItemModel = this.$.quickPickList.modelForElement(event.target)
             var listItem = this.$.quickPickList.itemForElement(event.target);
-            this.$.selector.select(listItem);
+            var selector = this.$.selector;
             
-            this.fire('quick-pick-close', event.detail);          
-        },
+            this.multi || this.clearSelection();
+            listItemModel.set('item.isSelected', !listItem.isSelected);
 
-        removeButton: function(event){
-            var listItem = this.$.quickPickList.itemForElement(event.target);
-            listItem.selected = false;            
-            this.$.selector.select(listItem);
-            this.fire('quick-pick-close', event.detail);
+            selector.select(listItem);
+            this.fire('selection-made', selector.selected);          
         },
 
         computeFilter: function(string) {
