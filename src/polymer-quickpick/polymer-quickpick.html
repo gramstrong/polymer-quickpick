@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../common-control/control-title.html">
+<link rel="import" href="quick-pick-list.html">
 
 <!--
 `polymer-quickpick`
@@ -8,74 +10,101 @@ Rough polymer implementation of the QuickPick control
 -->
 
 <dom-module id="polymer-quickpick">
-  <link rel="import" href="../common-control/control-title.html">
-  <link rel="import" href="quick-pick-button.html">
-  <link rel="import" href="quick-pick-list.html">
-  <template>
-    <control-title control-title="{{quickPickTitle}}" is-error={{quickPickError}} is-required="{{isRequired}}"></control-title>
-    <quick-pick-button on-click="openList" quick-pick-value="{{quickPickValue}}">[[buttonTitle]]</quick-pick-button>
-    <quick-pick-list is-open="{{isOpen}}" list-items="{{quickPickItems}}" quick-pick-value="{{quickPickValue}}"></quick-pick-list>
-  </template>
+    <template>
+        <control-title control-title="[[quickPickTitle]]" is-error=[[quickPickError]] is-required="[[isRequired]]"></control-title>
+        <selectable-button on-click="openList" button-value="[[quickPickValue]]" is-selected="[[hasSelection(quickPickValue.value)]]"></selectable-button>
+        <quick-pick-list multi="[[multi]]" is-open="[[isOpen]]" list-items="[[quickPickItems]]"></quick-pick-list>
+    </template>
 
-  <script>
+    <script>
 
-    var POLYMER_QUICKPICK = 'polymer-quickpick';
-
-    var SELECT = 'Select';
+    var DEFAULT_QUICKPICK_VALUE = 'Select';
+    var MULTI_QUICKPICK_VALUE = 'Mutliple';
 
     Polymer({
 
-      is: POLYMER_QUICKPICK,
+        is: 'polymer-quickpick',
 
-      properties: {
-        name: {
-          type: String,
-          value: POLYMER_QUICKPICK,
+        properties: {
+            quickPickTitle: {
+                type: String
+            },
+            quickPickItems: {
+                type: Array
+            },
+            quickPickError: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            quickPickValue:{
+                type: Object,
+                value: {
+                    title: DEFAULT_QUICKPICK_VALUE,
+                    value: false
+                }
+            },
+            isRequired: {
+                type: Boolean,
+                value: false
+            },
+            isOpen: {
+                type: Boolean,
+                value: false
+            },
+            multi: {
+                type: Boolean,
+                value: false
+            }
         },
-        quickPickTitle: {
-            type: String,
-            value: 'test'
+
+        listeners: {
+            'selection-made': 'setValue'
         },
-        quickPickItems: {
-            type: Array,
-            value: ""
+
+        setValue: function(event){
+            var selected = event.detail;
+            var title = this.getValueTitle(selected);
+            var value = selected.length === 0 ? false : selected;
+
+            this.set('quickPickValue.title', title);
+            this.set('quickPickValue.value', value);
+
+            this.isOpen = false;
+
+            if(this.quickPickError){
+                this.validate();
+            }
         },
-        quickPickError: {
-            type: Boolean,
-            value: false,
-            notify: true
+
+        getValueTitle: function(selected){
+            var title;
+
+            if(this.multi && selected.length){
+                title = selected.length > 1 ? MULTI_QUICKPICK_VALUE : selected[0].title;
+            }
+            else if(selected.value){
+                title = selected.title
+            }
+            else{
+                title = DEFAULT_QUICKPICK_VALUE
+            }
+
+            return title;
         },
-        isRequired: {
-          type: Boolean,
-          value: false,
-          notifiy: true
+
+        hasSelection: function(quickPickValue){
+            return (quickPickValue || (this.multi && quickPickValue.length));
         },
-        quickPickValue:{
-            type: String,
-            value: '',
-            notify: true,
-            observer: 'onValueChange'
+
+        openList: function(){
+            this.isOpen = !this.isOpen;
         },
-        isOpen: {
-            type: Boolean,
-            value: false
+
+        validate: function(){
+            this.quickPickError = !this.hasSelection(this.quickPickValue.value);
         }
-      },
-      openList: function(){
-          this.isOpen = !this.isOpen;
-      },
-
-      onValueChange: function(newValue){
-          this.isOpen = false;
-          if(this.quickPickError){
-            this.validate();
-          }
-      },
-
-      validate: function(){
-        this.quickPickError = !this.quickPickValue;
-      }
 
     });
-  </script>
+    </script>
 </dom-module>

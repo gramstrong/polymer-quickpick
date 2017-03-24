@@ -1,54 +1,107 @@
-
+<link rel="import" href="../common-control/drop-down.html">
+<link rel="import" href="../common-control/selectable-button.html">
 
 <dom-module id="quick-pick-list">
-    <link rel="import" href="../common-control/drop-down.html">
-    <link rel="import" href="quick-pick-row.html">
-    <link rel="import" type="css" href="css/quick-pick.css">
-
     <template>
-      <drop-down is-active="{{isOpen}}">
-          <input class="quick-pick-search" value="{{searchString::input}}">
-          <template is="dom-repeat" items="{{listItems}}"
-              filter="{{computeFilter(searchString)}}">
-              <quick-pick-row quick-pick-value="{{quickPickValue}}" row-value="{{item}}" class="quick-pick-button"></quick-pick-row>
-          </template>
-      </drop-down>
+        <style>
+        .quick-pick-search{
+            width: 146px;
+        }
+        </style>
+        <drop-down is-active="[[isOpen]]">
+            <input class="quick-pick-search" value="{{searchString::input}}">
+            <template is="dom-repeat" 
+                id = "quickPickList"
+                items="[[listItems]]"
+                filter="[[computeFilter(searchString)]]">
+                <selectable-button is-selected=[[item.isSelected]] button-value="[[item]]"></selectable-button>
+            </template>
+            <array-selector id="selector" items="[[listItems]]" selected="{{selected}}" multi=[[multi]] toggle></array-selector>
+        </drop-down>
     </template>
 
-  <script>
+    <script>
     Polymer({
-      is: 'quick-pick-list',
-      properties: {
-        listItems: {
-            type: Array,
-            value: []
+        is: 'quick-pick-list',
+        properties: {
+            listItems: {
+                type: Array,
+                value: []
+            },
+            isOpen: {
+                type: Boolean,
+                value: false,
+            },
+            filterString:{
+                type: String,
+                value: ''
+            },
+            multi: {
+                type: Boolean,
+                value: false
+            }
         },
-        isOpen: {
-            type: Boolean,
-            value: false
-        },
-        filterString:{
-            type: String,
-            value: ''
-        },
-        quickPickValue: {
-            type: String,
-            value: '',
-            notify: true
-        }
-      },
 
-      computeFilter: function(string) {
-          if (!string) {
-              return null;
-          } else {
-              string = string.toLowerCase();
-              return function(item) {
-                  var lowerItem = item.toLowerCase();
-                  return (lowerItem.indexOf(string) != -1);
-              };
-          }
-      }
+        ready: function(){
+            this.clearSelection();
+        },
+
+        listeners: {
+            'button-select': 'selectItem',
+            'button-deselect': 'selectItem'
+        },
+
+        observers: [
+            'editItem(listItems.splices)'
+        ],
+
+        editItem: function(changeRecord){
+            if(changeRecord){
+                console.log(changeRecord);
+            }
+        },
+
+        clearSelection: function(){
+            var selector = this.$.selector;
+            var self = this;
+
+            this.listItems.forEach(function(item, index){
+                var value = item.value;
+                var title = item.title;
+
+                self.set(['listItems', index], {
+                    title: title, 
+                    isSelected:false, 
+                    value: value
+                });
+            });
+
+            selector.clearSelection();            
+        },
+
+        selectItem: function(event){
+            var listItemModel = this.$.quickPickList.modelForElement(event.target)
+            var listItem = this.$.quickPickList.itemForElement(event.target);
+            var selector = this.$.selector;
+            
+            this.multi || this.clearSelection();
+            listItemModel.set('item.isSelected', !listItem.isSelected);
+
+            selector.select(listItem);
+            this.fire('selection-made', selector.selected);          
+        },
+
+        computeFilter: function(string) {
+            if (!string) {
+                return null;
+            } else {
+                string = string.toLowerCase();
+                return function(item) {
+                    var title = item.title.toLowerCase();
+                    return (title.indexOf(string) != -1);
+                };
+            }
+        }
     });
-  </script>
+    </script>
 </dom-module>
