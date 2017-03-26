@@ -10,7 +10,7 @@
         </style>
         <drop-down is-active="[[isOpen]]">
             <input class="quick-pick-search" value="{{searchString::input}}">
-            <template is="dom-repeat" 
+            <template is="dom-repeat"
                 id = "quickPickList"
                 items="[[listItems]]"
                 filter="[[computeFilter(searchString)]]">
@@ -70,25 +70,26 @@
                 var title = item.title;
 
                 self.set(['listItems', index], {
-                    title: title, 
-                    isSelected:false, 
+                    title: title,
+                    isSelected:false,
                     value: value
                 });
             });
 
-            selector.clearSelection();            
+            selector.clearSelection();
         },
 
         selectItem: function(event){
             var listItemModel = this.$.quickPickList.modelForElement(event.target)
             var listItem = this.$.quickPickList.itemForElement(event.target);
             var selector = this.$.selector;
-            
+            var deselect = (!this.multi && listItem.isSelected);
+
             this.multi || this.clearSelection();
             listItemModel.set('item.isSelected', !listItem.isSelected);
 
-            selector.select(listItem);
-            this.fire('selection-made', selector.selected);          
+            deselect || selector.select(listItem);
+            this.fire('selection-made', selector.selected);
         },
 
         computeFilter: function(string) {

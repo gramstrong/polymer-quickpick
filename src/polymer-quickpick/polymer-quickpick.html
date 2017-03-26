@@ -64,8 +64,8 @@ Rough polymer implementation of the QuickPick control
 
         setValue: function(event){
             var selected = event.detail;
-            var title = this.getValueTitle(selected);
-            var value = selected.length === 0 ? false : selected;
+            var title = this.getSelectedTitle(selected);
+            var value = this.getSelectedValue(selected);
 
             this.set('quickPickValue.title', title);
             this.set('quickPickValue.value', value);
@@ -77,7 +77,20 @@ Rough polymer implementation of the QuickPick control
             }
         },
 
-        getValueTitle: function(selected){
+        getSelectedValue: function(selected){
+            var value;
+
+            if((this.multi && selected.length) || selected.value){
+                value = selected;
+            }
+            else {
+                value = false;
+            }
+
+            return value;
+        },
+
+        getSelectedTitle: function(selected){
             var title;
 
             if(this.multi && selected.length){
