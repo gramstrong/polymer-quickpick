@@ -1,38 +1,30 @@
-# \<polymer-quickpick-demo\>
+# \<polymer-quickpick\>
 
-A demo of a QuickPick made in Polymer
+A demonstration of building a UI component using Google Polymer.
 
-## Install the Polymer-CLI
+## Serving the demo
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. 
 
-## Viewing Your Application
+```
+$ npm install -g polymer-cli
+```
+Polymer uses Bower for managing dependencies, so make sure you also have [Bower](https://www.npmjs.com/package/bower) installed.
 
+```
+$ npm install -g bower
+```
+
+Run bower install to install the dependencies for this project.
+
+```
+$ bower install
+```
+
+Then run the serve command with the polymer-cli tool.
 ```
 $ polymer serve
+info:    Files in this directory are available under the following URLs
+      applications: http://localhost:8081
+      reusable components: http://localhost:8081/components/polymer-quickpick-demo/
 ```
-
-## Building Your Application
-
-```
-$ polymer build
-```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
